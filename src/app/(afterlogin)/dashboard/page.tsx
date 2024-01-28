@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
-import { Overview } from "../components/charts";
-import Example from "../components/overall-review";
+import { Overview } from "../_components/charts";
+import Example from "../_components/overall-review";
 
 export default function Dashboard() {
   return (

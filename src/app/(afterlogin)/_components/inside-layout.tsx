@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { User, BarChart3, ReceiptText, Contact } from "lucide-react";
+import {
+  User,
+  BarChart3,
+  ReceiptText,
+  Contact,
+  type LucideIcon,
+} from "lucide-react";
 import { Nav } from "../../_components/nav";
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
@@ -11,6 +17,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
+import { usePathname } from "next/navigation";
 
 interface MailProps {
   defaultLayout: number[] | undefined;
@@ -19,6 +26,39 @@ interface MailProps {
   children?: React.ReactNode;
 }
 
+const Links: {
+  title: string;
+  label?: string;
+  icon: LucideIcon;
+  variant: "default" | "ghost";
+  href: string;
+}[] = [
+  {
+    title: "Dashboard",
+    icon: BarChart3,
+    variant: "default",
+    href: "/dashboard",
+  },
+  {
+    title: "Feedback",
+    icon: ReceiptText,
+    variant: "ghost",
+    href: "/feedback",
+  },
+  {
+    title: "Celebrate",
+    icon: Contact,
+    variant: "ghost",
+    href: "/celebrate",
+  },
+  {
+    title: "Customer",
+    icon: User,
+    variant: "ghost",
+    href: "/customer",
+  },
+];
+
 export function InsideLayout({
   defaultLayout = [265, 440, 655],
   defaultCollapsed = false,
@@ -26,6 +66,7 @@ export function InsideLayout({
   children,
 }: MailProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const pathname = usePathname();
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -67,36 +108,14 @@ export function InsideLayout({
               isCollapsed ? "h-[52px]" : "px-2",
             )}
           ></div>
-          <Nav
-            isCollapsed={isCollapsed}
-            links={[
-              {
-                title: "Dashboard",
-                icon: BarChart3,
-                variant: "default",
-              },
-              {
-                title: "Bills",
-                icon: ReceiptText,
-                variant: "ghost",
-              },
-              {
-                title: "Contacts",
-                icon: Contact,
-                variant: "ghost",
-              },
-              {
-                title: "Profile",
-                icon: User,
-                variant: "ghost",
-              },
-            ]}
-          />
+          <Nav isCollapsed={isCollapsed} links={Links} />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
           <div className="flex h-[52px] items-center px-4 py-2">
-            <h1 className="text-xl font-bold">Dashboard</h1>
+            <h1 className="text-xl font-bold">
+              {Links.find((link) => pathname.includes(link.href))?.title}
+            </h1>
           </div>
           <Separator />
           {children}

@@ -1,4 +1,4 @@
-import { InsideLayout } from "./components/inside-layout";
+import { InsideLayout } from "./_components/inside-layout";
 import { cookies } from "next/headers";
 
 export default function MainLayout({
