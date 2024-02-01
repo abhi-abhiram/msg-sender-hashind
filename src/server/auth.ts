@@ -1,15 +1,11 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import DiscordProvider from "next-auth/providers/discord";
-
+import CredentialsProvider from "next-auth/providers/credentials"
+import crypto from "node:crypto";
 import { env } from "~/env";
-import { db } from "~/server/db";
-import { mysqlTable } from "~/server/db/schema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -46,12 +42,32 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token = { ...token, id: user.id };
+      }
+      return token;
+    }
   },
-  adapter: DrizzleAdapter(db, mysqlTable) as Adapter,
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        userId: { label: "userId", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials) return null;
+
+        if (credentials.userId === env.USER_ID && credentials.password === env.USER_PASSWORD) {
+          return {
+            id: crypto.randomBytes(16).toString("hex"),
+            name: "Admin",
+          };
+        } else {
+          return null;
+        }
+      },
     }),
     /**
      * ...add more providers here.

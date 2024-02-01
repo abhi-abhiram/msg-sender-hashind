@@ -1,87 +1,61 @@
+"use client";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import { Download, Import, SlidersHorizontal } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { api } from "~/trpc/react";
+import moment from "moment";
 
 export function TableDemo() {
+  const { data } = api.customer.all.useQuery();
+
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+    <>
+      <div className="flex items-center gap-2">
+        <Input placeholder="Search Customer" />
+        <Button variant="ghost">
+          <SlidersHorizontal className="mr-2 h-4 w-4" />
+          Filter By
+        </Button>
+        <Button variant="ghost">
+          <Import className="mr-2 h-4 w-4" /> <span>Import Data</span>
+        </Button>
+        <Button variant="ghost">
+          <Download className="mr-2 h-4 w-4" /> Export Data
+        </Button>
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">S.NO</TableHead>
+            <TableHead>Customer Name</TableHead>
+            <TableHead>DOB</TableHead>
+            <TableHead>Anniversary</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {data?.map((invoice, i) => (
+            <TableRow key={i}>
+              <TableCell className="font-medium">{i + 1}</TableCell>
+              <TableCell>{invoice.name}</TableCell>
+              <TableCell>
+                {invoice.dob && moment(invoice.dob).format("DD/MM/YYYY")}
+              </TableCell>
+              <TableCell className="text-right">
+                {invoice.aniversary &&
+                  moment(invoice.aniversary).format("DD/MM/YYYY")}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }

@@ -18,6 +18,7 @@ type DatePickerProps = {
   value?: Date;
   onChange?: (date: Date | undefined) => void;
   placeholder?: string;
+  onBlur?: () => void;
 };
 
 export function DatePicker({
@@ -25,22 +26,21 @@ export function DatePicker({
   value,
   onChange,
   placeholder,
+  onBlur,
 }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date>();
-
   return (
-    <Popover>
+    <Popover onOpenChange={onBlur}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            !value && "text-muted-foreground",
             className,
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>{placeholder}</span>}
+          {value ? format(value, "PPP") : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

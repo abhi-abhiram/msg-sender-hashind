@@ -77,7 +77,7 @@ export function InsideLayout({
             sizes,
           )}`;
         }}
-        className="h-full items-stretch"
+        className="flex-1 items-stretch"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -111,14 +111,19 @@ export function InsideLayout({
           <Nav isCollapsed={isCollapsed} links={Links} />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+        <ResizablePanel
+          defaultSize={defaultLayout[1]}
+          minSize={30}
+          className="flex flex-col"
+        >
           <div className="flex h-[52px] items-center px-4 py-2">
             <h1 className="text-xl font-bold">
               {Links.find((link) => pathname.includes(link.href))?.title}
             </h1>
           </div>
+
           <Separator />
-          {children}
+          <div className="flex-1 overflow-auto">{children}</div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>

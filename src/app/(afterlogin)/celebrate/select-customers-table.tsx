@@ -6,9 +6,10 @@ import {
   getCoreRowModel,
   useReactTable,
   type RowSelectionState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
 import { Checkbox } from "~/components/ui/checkbox";
+import { useFormField } from "~/components/ui/form";
 
 import {
   Table,
@@ -18,10 +19,13 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export type Customer = {
   id: string;
   name: string;
+  phone_no: string;
 };
 
 export const columns: ColumnDef<Customer>[] = [
@@ -53,36 +57,34 @@ export const columns: ColumnDef<Customer>[] = [
   },
 ];
 
-interface DataTableProps<TData> {
-  data: TData[];
-  onRowSelectionChange?: (rowSelection: RowSelectionState) => void;
+interface DataTableProps {
+  rowSelection?: RowSelectionState;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState> | undefined;
 }
 
 export function CustomersTable({
-  data,
+  rowSelection,
   onRowSelectionChange,
-}: Omit<DataTableProps<Customer>, "columns">) {
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+}: DataTableProps) {
+  const { data } = api.customer.all.useQuery();
+  const { error } = useFormField();
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
       rowSelection,
     },
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange,
+    getRowId(originalRow) {
+      return originalRow.id;
+    },
   });
 
-  useEffect(() => {
-    if (onRowSelectionChange) {
-      onRowSelectionChange(rowSelection);
-    }
-  }, [onRowSelectionChange, rowSelection]);
-
   return (
-    <div className="rounded-md border">
+    <div className={cn("rounded-md border", error && "border-destructive")}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

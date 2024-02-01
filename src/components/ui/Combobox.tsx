@@ -54,7 +54,6 @@ export function ComboboxDemo() {
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [width, setWidth] = React.useState(0);
   const captureWidth = React.useCallback(() => {
-    console.log("captureWidth");
     if (buttonRef.current) {
       setWidth(buttonRef.current.getBoundingClientRect().width);
     }
