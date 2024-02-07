@@ -177,10 +177,17 @@ export function TableDemo() {
           </PopoverContent>
         </Popover>
         <ImportCustomerData />
-        <Button variant="ghost">
+        <a
+          href="/api/customers/export"
+          className={buttonVariants({
+            variant: "ghost",
+          })}
+          download
+        >
           <Download className="mr-2 h-4 w-4" /> Export Data
-        </Button>
+        </a>
       </div>
+
       <CustomerTable data={filteredData} />
     </>
   );
@@ -295,7 +302,7 @@ function ImportCustomerData() {
       const formData = new FormData();
       formData.append("file", file);
       axios
-        .post("/api/upload/customers", formData, {
+        .post("/api/customers/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
