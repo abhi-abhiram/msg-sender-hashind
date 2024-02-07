@@ -69,14 +69,14 @@ export default function Celebrate() {
   const customersSelected = useMemo(() => {
     const ids = Object.keys(rowSelection);
 
-    return data?.filter(({ id }) => ids.includes(id)) ?? [];
+    return data?.filter(({ id }) => ids.includes(id.toString())) ?? [];
   }, [data, rowSelection]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     sendMessages({
       messageId: values.template,
-      customers: customersSelected.map(({ name, phone_no }) => ({
-        name,
+      customers: customersSelected.map(({ first_name, phone_no }) => ({
+        name: first_name,
         phone_no,
       })),
       celebration_name: values.celebration_name,
@@ -247,7 +247,7 @@ export default function Celebrate() {
       </div>
       <CustomizeTheWishes
         messageId={form.watch("template")}
-        name={customersSelected[0]?.name ?? ""}
+        name={customersSelected[0]?.first_name ?? ""}
         celebration={form.watch("celebration_name")}
       />
     </div>

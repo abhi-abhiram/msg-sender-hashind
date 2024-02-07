@@ -23,8 +23,8 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export type Customer = {
-  id: string;
-  name: string;
+  id: number;
+  first_name: string;
   phone_no: string;
 };
 
@@ -52,8 +52,12 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
-    accessorKey: "name",
+    accessorKey: "first_name",
     header: "Name",
+  },
+  {
+    accessorKey: "phone_no",
+    header: "Phone",
   },
 ];
 
@@ -79,7 +83,7 @@ export function CustomersTable({
     enableRowSelection: true,
     onRowSelectionChange,
     getRowId(originalRow) {
-      return originalRow.id;
+      return originalRow.id.toString();
     },
   });
 

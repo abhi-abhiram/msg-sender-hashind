@@ -2,8 +2,7 @@
 import { DatePicker } from "~/components/ui/datepicker";
 import { Input } from "~/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import PhoneInput from "react-phone-number-input";
+import { type UseFormReturn, useForm } from "react-hook-form";
 import * as z from "zod";
 
 import {
@@ -14,7 +13,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
-import { Check, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import {
   Card,
@@ -26,12 +25,15 @@ import {
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "Name must be at least 3 characters long",
+  first_name: z.string().min(3, {
+    message: "First name must be atleast 3 characters long",
   }),
-  email: z.string().email(),
-  dob: z.date().optional(),
-  anniversary: z.date().optional(),
+  last_name: z.string().min(3, {
+    message: "Last name must be atleast 3 characters long",
+  }),
+  email: z.string().email().optional(),
+  dob: z.date(),
+  anniversary: z.date(),
   phone_no: z
     .string()
     .min(10, {
@@ -46,11 +48,12 @@ export default function AddCustomerForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      first_name: "",
+      last_name: "",
       dob: undefined,
       anniversary: undefined,
       phone_no: "",
+      email: undefined,
     },
   });
   const queryUtils = api.useUtils();
@@ -73,69 +76,7 @@ export default function AddCustomerForm() {
             <CardTitle className="text-lg">Add Customer</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="Name" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="Email" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phone_no"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="1234567890" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex justify-center gap-2">
-              <FormField
-                control={form.control}
-                name="dob"
-                render={({ field }) => (
-                  <DatePicker
-                    placeholder="Date of birth"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="anniversary"
-                render={({ field }) => (
-                  <DatePicker
-                    placeholder="Anniversary"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </div>
+            <CreateCustomerFormInputs form={form} />
           </CardContent>
           <CardFooter>
             <Button className="w-full" type="submit" disabled={isLoading}>
@@ -146,5 +87,99 @@ export default function AddCustomerForm() {
         </Card>
       </form>
     </Form>
+  );
+}
+
+export function CreateCustomerFormInputs({
+  form,
+}: {
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+}) {
+  return (
+    <>
+      <FormField
+        control={form.control}
+        name="first_name"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input {...field} placeholder="First Name" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="last_name"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input {...field} placeholder="Last Name" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="email"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input {...field} placeholder="Email" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="phone_no"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input {...field} placeholder="1234567890" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="dob"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl className="w-full">
+              <DatePicker
+                placeholder="Date of birth"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="anniversary"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl className="w-full">
+              <DatePicker
+                placeholder="Anniversary"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </>
   );
 }

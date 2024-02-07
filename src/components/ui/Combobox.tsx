@@ -48,7 +48,7 @@ type ComboboxProps = {
   className?: string;
 };
 
-export function ComboboxDemo() {
+export function ComboboxDemo(props: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -83,7 +83,7 @@ export function ComboboxDemo() {
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            : props.placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

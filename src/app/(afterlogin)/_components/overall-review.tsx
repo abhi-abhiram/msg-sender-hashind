@@ -2,26 +2,43 @@
 import React from "react";
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
 
-const data02 = [
-  { name: "Group A", value: 2400 },
-  { name: "Group B", value: 4567 },
-  { name: "Group C", value: 1398 },
-  { name: "Group D", value: 9800 },
-  { name: "Group E", value: 3908 },
-  { name: "Group F", value: 4800 },
-];
+export const colors = ["#1A3345", "#86BBD8", "#5D90B1", "#33658A"] as const;
 
-export default function Example() {
+export const mapColor = {
+  good: colors[0],
+  very_good: colors[1],
+  not_average: colors[2],
+  average: colors[3],
+};
+
+export default function Example({
+  values,
+}: {
+  values?: Record<"good" | "very_good" | "not_average" | "average", number>;
+}) {
+  const data = React.useMemo(() => {
+    if (!values) {
+      return [];
+    }
+
+    return Object.entries(values).map((v) => {
+      return {
+        name: v[0],
+        value: v[1],
+        color: mapColor[v[0] as keyof typeof mapColor],
+      };
+    });
+  }, [values]);
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
         <Pie
           dataKey="value"
-          data={data02}
+          data={data}
           innerRadius={50}
           outerRadius={100}
           fill="currentColor"
-          className="fill-primary"
           label
         />
         <Tooltip />

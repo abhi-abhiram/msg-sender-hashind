@@ -1,62 +1,38 @@
 "use client";
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { mapColor } from "./overall-review";
+import { type Visitings } from "../feedback/page";
 
-const data = [
-  {
-    name: "Jan",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Feb",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Mar",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Apr",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "May",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jun",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jul",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Aug",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Sep",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Oct",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Nov",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Dec",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-];
-
-export function Overview() {
+export function Overview({
+  data: preData,
+}: {
+  data?: Record<
+    (typeof Visitings)[number],
+    Record<"good" | "very_good" | "not_average" | "average", number>
+  >;
+}) {
+  const formatedData =
+    preData &&
+    Object.entries(preData).map((item) => {
+      return {
+        name:
+          item[0] === "morning"
+            ? "Breakfast"
+            : item[0] === "afternoon"
+              ? "Lunch"
+              : item[0] === "evening_snacks"
+                ? "Bites"
+                : "Dinner",
+        veryGood: item[1].very_good,
+        good: item[1].good,
+        average: item[1].average,
+        notAverage: item[1].not_average,
+      };
+    });
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
+      <BarChart data={formatedData}>
         <XAxis
           dataKey="name"
           stroke="#888888"
@@ -69,13 +45,31 @@ export function Overview() {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `${value}`}
         />
         <Bar
-          dataKey="total"
+          dataKey="veryGood"
           fill="currentColor"
           radius={[4, 4, 0, 0]}
-          className="fill-primary"
+          color={mapColor.very_good}
+        />
+        <Bar
+          dataKey="good"
+          fill="currentColor"
+          radius={[4, 4, 0, 0]}
+          color={mapColor.good}
+        />
+        <Bar
+          dataKey="average"
+          fill="currentColor"
+          radius={[4, 4, 0, 0]}
+          color={mapColor.average}
+        />
+        <Bar
+          dataKey="notAverage"
+          fill="currentColor"
+          radius={[4, 4, 0, 0]}
+          color={mapColor.not_average}
         />
       </BarChart>
     </ResponsiveContainer>
