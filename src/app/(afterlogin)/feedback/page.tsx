@@ -7,10 +7,3 @@ export default async function FeedbackPage() {
     </div>
   );
 }
-
-export const Visitings = [
-  "morning",
-  "afternoon",
-  "evening_snacks",
-  "dinner",
-] as const;

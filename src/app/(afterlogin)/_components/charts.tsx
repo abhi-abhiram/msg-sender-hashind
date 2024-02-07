@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { mapColor } from "./overall-review";
-import { type Visitings } from "../feedback/page";
+import { type Visitings } from "../feedback/feedback-form";
 
 export function Overview({
   data: preData,

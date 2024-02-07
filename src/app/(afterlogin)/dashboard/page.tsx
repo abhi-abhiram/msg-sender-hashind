@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Overview } from "../_components/charts";
 import Example from "../_components/overall-review";
 import { api } from "~/trpc/server";
-import { type Visitings } from "../feedback/page";
+import { type Visitings } from "../feedback/feedback-form";
 
 function getKeyFromScore(number: number) {
   switch (number) {

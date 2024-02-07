@@ -231,3 +231,10 @@ export default function FeedbackForm() {
     </Form>
   );
 }
+
+export const Visitings = [
+  "morning",
+  "afternoon",
+  "evening_snacks",
+  "dinner",
+] as const;
