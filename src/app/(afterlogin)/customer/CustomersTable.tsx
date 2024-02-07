@@ -28,7 +28,6 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  getFilteredRowModel,
 } from "@tanstack/react-table";
 import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
@@ -37,9 +36,6 @@ import { Label } from "~/components/ui/label";
 import React from "react";
 import axios from "axios";
 import { format } from "date-fns";
-import { PaginationEllipsis } from "~/components/ui/pagination";
-import { Select } from "~/components/ui/select";
-import { SelectTrigger } from "@radix-ui/react-select";
 
 type Customer = {
   id: number;
@@ -96,12 +92,32 @@ export function TableDemo() {
   const { data } = api.customer.all.useQuery();
 
   const filteredData = React.useMemo(() => {
-    if (!search) {
+    const filter1 = data?.filter((cus) => {
+      if (
+        cus.dob.getDate() === dob?.getDate() &&
+        cus.dob.getMonth() === dob?.getMonth() &&
+        cus.dob.getFullYear() === dob?.getFullYear()
+      ) {
+        return cus;
+      }
+
+      if (
+        cus.anniversary.getDate() === anniversary?.getDate() &&
+        cus.anniversary.getMonth() === anniversary?.getMonth() &&
+        cus.anniversary.getFullYear() === anniversary?.getFullYear()
+      ) {
+        return cus;
+      }
+    });
+
+    if (!search && (!!dob || !!anniversary)) {
+      return filter1 ?? [];
+    } else if (!search) {
       return data ?? [];
     }
 
     return (
-      data?.filter((customer) =>
+      filter1?.filter((customer) =>
         Object.entries(customer).some((value) => {
           if (searchFields.includes(value[0])) {
             return (value[1] as string)
@@ -111,7 +127,7 @@ export function TableDemo() {
         }),
       ) ?? []
     );
-  }, [data, search]);
+  }, [anniversary, data, dob, search]);
 
   return (
     <>
@@ -142,6 +158,7 @@ export function TableDemo() {
                     onChange={setDob}
                     placeholder="DOB"
                     format="P"
+                    disabled={!!anniversary}
                   />
                 </div>
                 <div className="flex-1">
@@ -152,6 +169,7 @@ export function TableDemo() {
                     onChange={setAnniversary}
                     placeholder="Anniversary"
                     format="P"
+                    disabled={!!dob}
                   />
                 </div>
               </div>

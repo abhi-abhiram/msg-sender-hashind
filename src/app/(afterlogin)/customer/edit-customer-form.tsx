@@ -209,7 +209,7 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
         </CardContent>
         <CardFooter className=" flex justify-center gap-4">
           <Button className="w-full" type="submit">
-            Edit Customer
+            Save Changes
           </Button>
           <AlertDialog>
             <AlertDialogTrigger

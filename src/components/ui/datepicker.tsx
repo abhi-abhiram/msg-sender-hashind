@@ -20,6 +20,7 @@ type DatePickerProps = {
   placeholder?: string;
   onBlur?: () => void;
   format?: string;
+  disabled?: boolean;
 };
 
 export function DatePicker({
@@ -29,6 +30,7 @@ export function DatePicker({
   placeholder,
   onBlur,
   format: dateFormat = "PPP",
+  disabled,
 }: DatePickerProps) {
   return (
     <Popover onOpenChange={onBlur}>
@@ -40,6 +42,7 @@ export function DatePicker({
             !value && "text-muted-foreground",
             className,
           )}
+          disabled={disabled}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {value ? format(value, dateFormat) : <span>{placeholder}</span>}
