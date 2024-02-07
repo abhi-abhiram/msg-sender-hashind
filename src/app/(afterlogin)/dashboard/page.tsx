@@ -3,6 +3,7 @@ import { Overview } from "../_components/charts";
 import Example from "../_components/overall-review";
 import { api } from "~/trpc/server";
 import { type Visitings } from "../feedback/feedback-form";
+import { type RouterOutputs } from "~/trpc/shared";
 
 function getKeyFromScore(number: number) {
   switch (number) {
@@ -18,7 +19,7 @@ function getKeyFromScore(number: number) {
 }
 
 export default async function Dashboard() {
-  const feedbacks = await api.customer.dashboard.query();
+  const feedbacks = [] as RouterOutputs["customer"]["dashboard"];
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
