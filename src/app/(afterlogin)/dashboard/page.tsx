@@ -4,6 +4,7 @@ import Example from "../_components/overall-review";
 import { api } from "~/trpc/server";
 import { type Visitings } from "../feedback/feedback-form";
 import { type RouterOutputs } from "~/trpc/shared";
+import { unstable_noStore as noStore } from "next/cache";
 
 function getKeyFromScore(number: number) {
   switch (number) {
@@ -19,7 +20,8 @@ function getKeyFromScore(number: number) {
 }
 
 export default async function Dashboard() {
-  const feedbacks = [] as RouterOutputs["customer"]["dashboard"];
+  noStore();
+  const feedbacks = await api.customer.dashboard.query();
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
