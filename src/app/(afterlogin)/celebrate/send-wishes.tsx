@@ -24,14 +24,17 @@ import { CustomersTable } from "./select-customers-table";
 import { Separator } from "~/components/ui/separator";
 import { template_data } from "~/templates-data";
 import { type RowSelectionState } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { api } from "~/trpc/react";
 import { Input } from "~/components/ui/input";
 
 const formSchema = z
   .object({
-    celebration: z.string(),
-    template: z.string(),
+    template: z
+      .string({
+        required_error: "Select a template",
+      })
+      .min(1, { message: "Select a template" }),
     celebration_name: z.string().optional(),
     rowSelection: z
       .record(z.boolean())
@@ -43,7 +46,9 @@ const formSchema = z
     (data) =>
       template_data.find(
         ({ message, type }) => message === data.template && type === "custom",
-      ) && data.celebration_name,
+      )
+        ? !!data.celebration_name
+        : true,
     {
       message: "Celebration name is required",
       path: ["celebration_name"],
@@ -54,8 +59,7 @@ export default function Celebrate() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      celebration: "",
-      template: "",
+      template: undefined,
       celebration_name: "",
       rowSelection: {},
     },
@@ -63,6 +67,8 @@ export default function Celebrate() {
 
   const { data } = api.customer.all.useQuery();
   const { mutate: sendMessages } = api.customer.send_messages.useMutation();
+
+  const submitRef = useRef<HTMLButtonElement>(null);
 
   const rowSelection = form.watch("rowSelection");
 
@@ -216,7 +222,7 @@ export default function Celebrate() {
                 </span>
               )}
             </div>
-            <div className="w-full">
+            <div className="w-full overflow-auto">
               <FormField
                 control={form.control}
                 name="rowSelection"
@@ -240,7 +246,9 @@ export default function Celebrate() {
               />
             </div>
             <div className="flex items-center justify-center">
-              <Button type="submit">Submit</Button>
+              <Button type="submit" ref={submitRef} className="hidden">
+                Submit
+              </Button>
             </div>
           </form>
         </Form>
@@ -249,6 +257,7 @@ export default function Celebrate() {
         messageId={form.watch("template")}
         name={customersSelected[0]?.first_name ?? ""}
         celebration={form.watch("celebration_name")}
+        onSend={() => submitRef.current?.click()}
       />
     </div>
   );
@@ -258,10 +267,12 @@ function CustomizeTheWishes({
   messageId,
   name,
   celebration,
+  onSend,
 }: {
   messageId?: string;
   name?: string;
   celebration?: string;
+  onSend?: () => void;
 }) {
   const template_message = useMemo(() => {
     if (!messageId) return "";
@@ -290,7 +301,7 @@ function CustomizeTheWishes({
         </div>
       </div>
       <div className="flex justify-center py-4">
-        <Button onClick={(e) => e.preventDefault()} size="sm">
+        <Button onClick={onSend} className="w-full">
           Send
         </Button>
       </div>

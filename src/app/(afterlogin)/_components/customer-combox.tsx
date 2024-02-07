@@ -49,7 +49,7 @@ const formSchema = z.object({
   last_name: z.string().min(3, {
     message: "Last name must be atleast 3 characters long",
   }),
-  email: z.string().email().optional(),
+  email: z.string().optional(),
   dob: z.date(),
   anniversary: z.date(),
   phone_no: z
@@ -168,7 +168,9 @@ export function CustomerCombox({
                         Add a new customer to the database
                       </DialogDescription>
                     </DialogHeader>
-                    <CreateCustomerForm />
+                    <CreateCustomerForm
+                      onSuccess={(id) => setValue?.(id.toString())}
+                    />
                   </DialogContent>
                 </Dialog>
               )}
@@ -203,13 +205,17 @@ export function CustomerCombox({
   );
 }
 
-function CreateCustomerForm() {
+function CreateCustomerForm({
+  onSuccess,
+}: {
+  onSuccess?: (id: number) => void;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
-      email: "",
+      email: undefined,
       dob: undefined,
       anniversary: undefined,
       phone_no: "",
@@ -220,8 +226,9 @@ function CreateCustomerForm() {
   const closeRef = React.useRef<HTMLButtonElement>(null);
 
   const { isLoading, mutate } = api.customer.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (id) => {
       void queryUtils.customer.all.invalidate();
+      onSuccess?.(id);
       closeRef.current?.click();
     },
   });

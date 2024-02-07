@@ -3,7 +3,6 @@ import { Overview } from "../_components/charts";
 import Example from "../_components/overall-review";
 import { api } from "~/trpc/server";
 import { type Visitings } from "../feedback/feedback-form";
-import { type RouterOutputs } from "~/trpc/shared";
 import { unstable_noStore as noStore } from "next/cache";
 
 function getKeyFromScore(number: number) {
@@ -143,7 +142,7 @@ export default async function Dashboard() {
         <div className="grid grid-cols-2 gap-4">
           <Card>
             <CardHeader>
-              <CardTitle>Overview</CardTitle>
+              <CardTitle>Current Month</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
               <Overview data={dashboardData.graphData.currentMonth} />
@@ -151,7 +150,7 @@ export default async function Dashboard() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Overview</CardTitle>
+              <CardTitle>Last 6 Months</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
               <Overview data={dashboardData.graphData.last6Months} />

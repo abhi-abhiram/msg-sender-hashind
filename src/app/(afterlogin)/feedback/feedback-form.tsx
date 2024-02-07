@@ -104,6 +104,7 @@ const formSchema = z
     visitingTime: z.enum(["morning", "afternoon", "evening_snacks", "dinner"], {
       required_error: "Visiting time is required",
     }),
+    created_at: z.date().optional(),
   })
   .refine(
     (data) => Object.keys(data.feedback).length === feedback_form.length,
@@ -120,6 +121,7 @@ export default function FeedbackForm() {
       id: "",
       feedback: {},
       visitingTime: undefined,
+      created_at: new Date(),
     },
   });
 
@@ -154,6 +156,7 @@ export default function FeedbackForm() {
       id: values.id,
       feedback,
       visitingTime: values.visitingTime,
+      created_at: values.created_at,
     });
   }
 
@@ -204,8 +207,16 @@ export default function FeedbackForm() {
                 </FormItem>
               )}
             />
-            <DatePicker placeholder="DOB" className="w-fit" />
-            <DatePicker placeholder="Anniversary" className="w-fit" />
+            <FormField
+              control={form.control}
+              name="created_at"
+              render={({ field }) => (
+                <FormItem>
+                  <DatePicker {...field} placeholder="Date" />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
         <FormField

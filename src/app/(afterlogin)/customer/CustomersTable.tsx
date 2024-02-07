@@ -282,9 +282,8 @@ function ImportCustomerData() {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((res) => {
+        .then(() => {
           setFile(null);
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);

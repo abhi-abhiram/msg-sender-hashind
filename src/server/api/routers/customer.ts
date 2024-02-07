@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { desc, eq, like, or, countDistinct } from "drizzle-orm";
+import { desc, eq, like, or, countDistinct, sql } from "drizzle-orm";
 import * as z from "zod";
 import {
   createTRPCRouter,
@@ -36,7 +36,9 @@ export const customerRouter = createTRPCRouter({
       dob,
     })
 
-    return true;
+    const customerid = await ctx.db.select({ id: sql`LAST_INSERT_ID()` }).from(customers).limit(1);
+
+    return customerid[0]?.id as number;
   }),
 
   get: protectedProcedure.input(z.object({
@@ -156,7 +158,8 @@ export const customerRouter = createTRPCRouter({
   sendFeedbackMsg: protectedProcedure.input(z.object({
     id: z.union([z.number(), z.string()]),
     feedback: z.record(z.number().min(1).max(4)),
-    visitingTime: z.enum(["morning", "afternoon", "evening_snacks", "dinner"])
+    visitingTime: z.enum(["morning", "afternoon", "evening_snacks", "dinner"]),
+    created_at: z.date().optional(),
   })).mutation(async ({ ctx, input }) => {
     const { id, feedback } = input;
 
@@ -187,7 +190,8 @@ export const customerRouter = createTRPCRouter({
         ...feedback as Record<typeof KPIs[number], number>,
       },
       customer_id: customer.id,
-      visitingTime: input.visitingTime
+      visitingTime: input.visitingTime,
+      created_at: input.created_at
     })
 
     const url = `${env.FAST_2_SMS}?authorization=${env.FAST_2_SMS_API_KEY}&route=dlt&sender_id=${message.sender_id}&message=${message.message}&variables_values=${customer.first_name}&flash=0&numbers=${customer.phone_no}`;

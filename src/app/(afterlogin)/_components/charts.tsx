@@ -1,6 +1,13 @@
 "use client";
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { mapColor } from "./overall-review";
 import { type Visitings } from "../feedback/feedback-form";
 
@@ -47,30 +54,32 @@ export function Overview({
           axisLine={false}
           tickFormatter={(value) => `${value}`}
         />
+
         <Bar
+          name="Very Good"
           dataKey="veryGood"
-          fill="currentColor"
+          fill={mapColor.very_good}
           radius={[4, 4, 0, 0]}
-          color={mapColor.very_good}
         />
         <Bar
+          name="Good"
           dataKey="good"
-          fill="currentColor"
+          fill={mapColor.good}
           radius={[4, 4, 0, 0]}
-          color={mapColor.good}
         />
         <Bar
+          name="Average"
           dataKey="average"
-          fill="currentColor"
+          fill={mapColor.average}
           radius={[4, 4, 0, 0]}
-          color={mapColor.average}
         />
         <Bar
+          name="Not Average"
           dataKey="notAverage"
-          fill="currentColor"
+          fill={mapColor.not_average}
           radius={[4, 4, 0, 0]}
-          color={mapColor.not_average}
         />
+        <Legend verticalAlign="top" />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -88,7 +88,13 @@ export function CustomersTable({
   });
 
   return (
-    <div className={cn("rounded-md border", error && "border-destructive")}>
+    <div
+      className={cn(
+        "rounded-md border",
+        error && "border-destructive",
+        "h-[500px] overflow-auto",
+      )}
+    >
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
