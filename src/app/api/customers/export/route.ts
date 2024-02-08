@@ -1,12 +1,17 @@
 import { db } from "~/server/db";
 import xlsx from "node-xlsx";
 import { format } from "date-fns";
-import { type NextApiRequest } from "next";
+import { type NextRequest } from "next/server";
+import { getServerSession, } from "next-auth";
 
+export async function GET(req: NextRequest,) {
 
+    const session = await getServerSession();
 
+    if (!session?.user) {
+        return new Response(null, { status: 401 });
+    }
 
-export async function GET(req: NextApiRequest,) {
 
     const customers = await db.query.customers.findMany();
 

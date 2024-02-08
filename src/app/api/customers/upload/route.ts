@@ -1,6 +1,7 @@
 import xlsx from "node-xlsx";
 import { db } from "~/server/db";
 import { customers } from "~/server/db/schema";
+import { getServerSession } from "next-auth";
 
 
 const columns = [
@@ -14,6 +15,16 @@ const columns = [
 
 
 export async function POST(req: Request,) {
+
+
+    const session = await getServerSession();
+
+    if (!session?.user) {
+        return new Response(null, { status: 401 });
+    }
+
+
+
     const data = await req.formData();
 
     const file: File | null = data.get('file') as File;
