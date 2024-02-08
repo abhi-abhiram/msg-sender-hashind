@@ -109,30 +109,32 @@ export function CreateCustomerFormInputs({
 }) {
   return (
     <>
-      <FormField
-        control={form.control}
-        name="first_name"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-              <Input {...field} placeholder="First Name" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="last_name"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-              <Input {...field} placeholder="Last Name" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="flex items-center gap-2">
+        <FormField
+          control={form.control}
+          name="first_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} placeholder="First Name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="last_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} placeholder="Last Name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
       <FormField
         control={form.control}
         name="email"
@@ -145,7 +147,6 @@ export function CreateCustomerFormInputs({
           </FormItem>
         )}
       />
-
       <FormField
         control={form.control}
         name="phone_no"
@@ -158,40 +159,41 @@ export function CreateCustomerFormInputs({
           </FormItem>
         )}
       />
-
-      <FormField
-        control={form.control}
-        name="dob"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl className="w-full">
-              <DatePicker
-                placeholder="Date of birth"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="anniversary"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl className="w-full">
-              <DatePicker
-                placeholder="Anniversary"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="flex items-center gap-2">
+        <FormField
+          control={form.control}
+          name="dob"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormControl className="w-full">
+                <DatePicker
+                  placeholder="Date of birth"
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="anniversary"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormControl className="w-full">
+                <DatePicker
+                  placeholder="Anniversary"
+                  value={field.value}
+                  onChange={field.onChange}
+                  format="P"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
     </>
   );
 }

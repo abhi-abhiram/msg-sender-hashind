@@ -6,12 +6,12 @@ import EditCustomerForm from "./edit-customer-form";
 export default async function CustomerPage() {
   return (
     <div className="p-4">
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-1 space-y-2">
+      <div className="grid grid-cols-5 gap-4">
+        <div className="col-span-2 space-y-2">
           <AddCustomerForm />
           <EditCustomerForm />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-3">
           <div className="p-4">
             <h3 className="text-lg">Customer List</h3>
           </div>

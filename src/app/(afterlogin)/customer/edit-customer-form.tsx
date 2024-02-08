@@ -109,6 +109,15 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
   const { isLoading, mutate } = api.customer.edit.useMutation({
     onSuccess: () => {
       void queryUtils.customer.all.invalidate();
+      toast({
+        description: "Customer updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        description: "Failed to update customer",
+        variant: "destructive",
+      });
     },
   });
 
@@ -136,30 +145,32 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent className="space-y-2">
           <CardTitle className="text-lg">Search Result</CardTitle>
-          <FormField
-            control={form.control}
-            name="first_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} placeholder="First Name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="last_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} placeholder="Last Name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name="first_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input {...field} placeholder="First Name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="last_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input {...field} placeholder="Last Name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="email"
@@ -186,39 +197,41 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="dob"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl className="w-full">
-                  <DatePicker
-                    placeholder="Date of birth"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl className="w-full">
+                    <DatePicker
+                      placeholder="Date of birth"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="anniversary"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl className="w-full">
-                  <DatePicker
-                    placeholder="Anniversary"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="anniversary"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl className="w-full">
+                    <DatePicker
+                      placeholder="Anniversary"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </CardContent>
         <CardFooter className=" flex justify-center gap-4">
           <Button className="w-full" type="submit">
