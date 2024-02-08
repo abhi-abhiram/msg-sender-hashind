@@ -176,7 +176,7 @@ export const customerRouter = createTRPCRouter({
 
     const score = Object.values(feedback).reduce((acc, curr) => acc + curr, 0);
 
-    const message = score >= MEDIAN_SCORE ? template_data.find((data) => data.message === "163054") : template_data.find((data) => data.message === "163058");
+    const message = score > MEDIAN_SCORE ? template_data.find((data) => data.message === "163058") : template_data.find((data) => data.message === "163054");
 
     if (!message) {
       throw new TRPCError({
