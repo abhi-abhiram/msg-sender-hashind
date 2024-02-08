@@ -68,14 +68,14 @@ const columns: ColumnDef<Customer>[] = [
     accessorKey: "dob",
     header: "DOB",
     cell(props) {
-      return format(props.getValue<Date>(), "P");
+      return format(props.getValue<Date>(), "dd/MM/yyyy");
     },
   },
   {
     accessorKey: "anniversary",
     header: "Anniversary",
     cell: (props) => {
-      return format(props.getValue<Date>(), "P");
+      return format(props.getValue<Date>(), "dd/MM/yyyy");
     },
   },
 ];
@@ -146,8 +146,18 @@ export function TableDemo() {
           </PopoverTrigger>
           <PopoverContent className="w-80">
             <div className="grid gap-4">
-              <div className="space-y-2">
+              <div className="flex items-center justify-between">
                 <h4 className="font-medium leading-none">Filters</h4>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setDob(undefined);
+                    setAnniversary(undefined);
+                  }}
+                  size={"sm"}
+                >
+                  Clear
+                </Button>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1">
@@ -157,7 +167,6 @@ export function TableDemo() {
                     value={dob}
                     onChange={setDob}
                     placeholder="DOB"
-                    format="P"
                     disabled={!!anniversary}
                   />
                 </div>

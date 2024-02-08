@@ -29,7 +29,7 @@ export function DatePicker({
   onChange,
   placeholder,
   onBlur,
-  format: dateFormat = "PPP",
+  format: dateFormat = "dd/MM/yyyy",
   disabled,
 }: DatePickerProps) {
   return (
