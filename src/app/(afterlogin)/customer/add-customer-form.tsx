@@ -23,6 +23,7 @@ import {
   CardFooter,
 } from "~/components/ui/card";
 import { api } from "~/trpc/react";
+import { useToast } from "~/components/ui/use-toast";
 
 const formSchema = z.object({
   first_name: z.string().min(3, {
@@ -58,9 +59,20 @@ export default function AddCustomerForm() {
   });
   const queryUtils = api.useUtils();
 
+  const { toast } = useToast();
+
   const { isLoading, mutate } = api.customer.create.useMutation({
     onSuccess: () => {
       void queryUtils.customer.all.invalidate();
+      toast({
+        description: "Customer added successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        description: "Failed to add customer",
+        variant: "destructive",
+      });
     },
   });
 

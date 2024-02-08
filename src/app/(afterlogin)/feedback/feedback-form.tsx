@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { api } from "~/trpc/react";
+import { useToast } from "~/components/ui/use-toast";
 
 export const KPIs = [
   "quality_of_food",
@@ -125,7 +126,15 @@ export default function FeedbackForm() {
     },
   });
 
-  const { mutate } = api.customer.sendFeedbackMsg.useMutation();
+  const { toast } = useToast();
+
+  const { mutate } = api.customer.sendFeedbackMsg.useMutation({
+    onSuccess: () => {
+      toast({
+        description: "Feedback added successfully",
+      });
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const feedback = Object.entries(values.feedback).reduce(

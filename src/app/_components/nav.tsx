@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { type LucideIcon } from "lucide-react";
+import { LogOut, type LucideIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 interface NavProps {
   isCollapsed: boolean;
@@ -53,6 +54,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
                   <span className="sr-only">{link.title}</span>
                 </Link>
               </TooltipTrigger>
+
               <TooltipContent side="right" className="flex items-center gap-4">
                 {link.title}
                 {link.label && (
@@ -91,6 +93,26 @@ export function Nav({ links, isCollapsed }: NavProps) {
               )}
             </Link>
           ),
+        )}
+        {isCollapsed ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            onClick={() => signOut()}
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="justify-start"
+            onClick={() => signOut()}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Logout</span>
+          </Button>
         )}
       </nav>
     </div>

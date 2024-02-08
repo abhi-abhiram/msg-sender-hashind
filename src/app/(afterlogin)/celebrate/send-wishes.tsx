@@ -27,6 +27,7 @@ import { type RowSelectionState } from "@tanstack/react-table";
 import { useMemo, useRef } from "react";
 import { api } from "~/trpc/react";
 import { Input } from "~/components/ui/input";
+import { useToast } from "~/components/ui/use-toast";
 
 const formSchema = z
   .object({
@@ -66,7 +67,22 @@ export default function Celebrate() {
   });
 
   const { data } = api.customer.all.useQuery();
-  const { mutate: sendMessages } = api.customer.send_messages.useMutation();
+
+  const { toast } = useToast();
+
+  const { mutate: sendMessages } = api.customer.send_messages.useMutation({
+    onSuccess() {
+      toast({
+        description: "Messages sent successfully",
+      });
+    },
+    onError() {
+      toast({
+        description: "Failed to send messages",
+        variant: "destructive",
+      });
+    },
+  });
 
   const submitRef = useRef<HTMLButtonElement>(null);
 

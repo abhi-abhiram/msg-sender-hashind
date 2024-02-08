@@ -34,6 +34,7 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import { cn } from "~/lib/utils";
+import { useToast } from "~/components/ui/use-toast";
 
 const formSchema = z.object({
   first_name: z.string().min(3, {
@@ -59,6 +60,7 @@ const formSchema = z.object({
 export default function EditCustomerForm() {
   const [customerId, setCustomerId] = React.useState<string>("");
   const { data } = api.customer.all.useQuery();
+
   const customer = React.useMemo(
     () => data?.find((c) => c.id.toString() === customerId),
     [customerId, data],
@@ -100,6 +102,8 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
     },
   });
 
+  const { toast } = useToast();
+
   const queryUtils = api.useUtils();
 
   const { isLoading, mutate } = api.customer.edit.useMutation({
@@ -111,6 +115,15 @@ function CustomerForm({ customer }: { customer?: CustomerEdit }) {
   const { mutate: deleteCustomer } = api.customer.delete.useMutation({
     onSuccess: () => {
       void queryUtils.customer.all.invalidate();
+      toast({
+        description: "Customer deleted successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        description: "Failed to delete customer",
+        variant: "destructive",
+      });
     },
   });
 
