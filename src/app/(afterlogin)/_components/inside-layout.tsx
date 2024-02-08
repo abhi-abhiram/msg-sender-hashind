@@ -18,6 +18,7 @@ import {
   ResizablePanelGroup,
 } from "~/components/ui/resizable";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface MailProps {
   defaultLayout: number[] | undefined;
@@ -107,7 +108,11 @@ export function InsideLayout({
               "flex h-[52px] items-center justify-center",
               isCollapsed ? "h-[52px]" : "px-2",
             )}
-          ></div>
+          >
+            <div>
+              <Image src="/logo.png" width={100} height={100} alt="logo" />
+            </div>
+          </div>
           <Nav isCollapsed={isCollapsed} links={Links} />
         </ResizablePanel>
         <ResizableHandle withHandle />
