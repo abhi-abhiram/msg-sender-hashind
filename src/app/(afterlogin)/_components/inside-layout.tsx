@@ -19,6 +19,7 @@ import {
 } from "~/components/ui/resizable";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { api } from "~/trpc/react";
 
 interface MailProps {
   defaultLayout: number[] | undefined;
@@ -125,12 +126,23 @@ export function InsideLayout({
             <h1 className="text-xl font-bold">
               {Links.find((link) => pathname.includes(link.href))?.title}
             </h1>
-          </div>
 
+            <DisplayBalance />
+          </div>
           <Separator />
           <div className="flex-1 overflow-auto">{children}</div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>
+  );
+}
+
+function DisplayBalance() {
+  const { data } = api.customer.getBalance.useQuery();
+
+  return (
+    <div className="ml-auto">
+      <h1>Balance: {data}</h1>
+    </div>
   );
 }

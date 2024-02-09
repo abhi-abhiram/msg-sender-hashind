@@ -93,7 +93,7 @@ export const customerRouter = createTRPCRouter({
     }
 
     const promises = customers.map(async ({ name, phone_no }) => {
-      const url = `${env.FAST_2_SMS}?authorization=${env.FAST_2_SMS_API_KEY}&route=dlt&sender_id=${message.sender_id}&message=${messageId}&variables_values=${message.type === "custom" ? name + "|" + input.celebration_name : name}&flash=0&numbers=${phone_no}`;
+      const url = `${env.FAST_2_SMS}/bulkV2?authorization=${env.FAST_2_SMS_API_KEY}&route=dlt&sender_id=${message.sender_id}&message=${messageId}&variables_values=${message.type === "custom" ? name + "|" + input.celebration_name : name}&flash=0&numbers=${phone_no}`;
 
       return axios.get(url);
     });
@@ -194,7 +194,7 @@ export const customerRouter = createTRPCRouter({
       created_at: input.created_at
     })
 
-    const url = `${env.FAST_2_SMS}?authorization=${env.FAST_2_SMS_API_KEY}&route=dlt&sender_id=${message.sender_id}&message=${message.message}&variables_values=${customer.first_name}&flash=0&numbers=${customer.phone_no}`;
+    const url = `${env.FAST_2_SMS}/bulkV2?authorization=${env.FAST_2_SMS_API_KEY}&route=dlt&sender_id=${message.sender_id}&message=${message.message}&variables_values=${customer.first_name}&flash=0&numbers=${customer.phone_no}`;
 
     return axios.get(url).then(() => true).catch(() => {
       throw new TRPCError({
@@ -244,7 +244,14 @@ export const customerRouter = createTRPCRouter({
 
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.select().from(feedbacks).orderBy(desc(feedbacks.created_at));
+  }),
+
+  getBalance: protectedProcedure.query(async () => {
+    const url = `${env.FAST_2_SMS}/wallet?authorization=${env.FAST_2_SMS_API_KEY}`
+
+    return (await axios.get<{ wallet: string }>(url)).data.wallet;
   })
+
 });
 
 

@@ -126,6 +126,8 @@ export default function FeedbackForm() {
     },
   });
 
+  const queryUtils = api.useUtils();
+
   const { toast } = useToast();
 
   const { mutate } = api.customer.sendFeedbackMsg.useMutation({
@@ -133,6 +135,7 @@ export default function FeedbackForm() {
       toast({
         description: "Feedback added successfully",
       });
+      void queryUtils.customer.getBalance.invalidate();
     },
   });
 

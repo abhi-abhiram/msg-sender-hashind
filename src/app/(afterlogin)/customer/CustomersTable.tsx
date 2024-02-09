@@ -36,6 +36,8 @@ import { Label } from "~/components/ui/label";
 import React from "react";
 import axios from "axios";
 import { format } from "date-fns";
+import { Checkbox } from "~/components/ui/checkbox";
+import { useToast } from "~/components/ui/use-toast";
 
 type Customer = {
   id: number;
@@ -49,8 +51,26 @@ type Customer = {
 
 const columns: ColumnDef<Customer>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="translate-y-[2px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="translate-y-[2px]"
+      />
+    ),
   },
   {
     accessorKey: "first_name",
@@ -89,7 +109,21 @@ export function TableDemo() {
   );
   const [search, setSearch] = React.useState("");
 
+  const [rowSelection, onRowSelectionChange] = React.useState<
+    Record<string, boolean>
+  >({});
+
+  const { toast } = useToast();
+
+  const queryUtils = api.useUtils();
+
   const { data } = api.customer.all.useQuery();
+  const { mutate } = api.customer.send_messages.useMutation({
+    onSuccess: () => {
+      toast({ description: "Messages sent successfully" });
+      void queryUtils.customer.getBalance.invalidate();
+    },
+  });
 
   const filteredData = React.useMemo(() => {
     const filter1 = data?.filter((cus) => {
@@ -195,20 +229,61 @@ export function TableDemo() {
         >
           <Download className="mr-2 h-4 w-4" /> Export Data
         </a>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            mutate({
+              customers: Object.keys(rowSelection)
+                .filter((key) => rowSelection[key])
+                .reduce(
+                  (acc, key) => {
+                    const { first_name, phone_no } = data?.find(
+                      (cus) => cus.id.toString() === key,
+                    ) as Customer;
+                    acc.push({ name: first_name, phone_no });
+                    return acc;
+                  },
+                  [] as { name: string; phone_no: string }[],
+                ),
+              messageId: dob ? "163062" : "163061",
+            });
+          }}
+          disabled={!Object.keys(rowSelection).length || (!dob && !anniversary)}
+        >
+          Send
+        </Button>
       </div>
-
-      <CustomerTable data={filteredData} />
+      <CustomerTable
+        data={filteredData}
+        rowSelection={rowSelection}
+        onRowSelectionChange={onRowSelectionChange}
+      />
     </>
   );
 }
 
-function CustomerTable({ data }: { data: Customer[] }) {
+function CustomerTable({
+  data,
+  rowSelection,
+  onRowSelectionChange,
+}: {
+  data: Customer[];
+  rowSelection?: Record<string, boolean>;
+  onRowSelectionChange?: React.Dispatch<
+    React.SetStateAction<Record<string, boolean>>
+  >;
+}) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.id.toString(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableRowSelection: true,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange,
   });
 
   return (

@@ -67,6 +67,7 @@ export default function Celebrate() {
   });
 
   const { data } = api.customer.all.useQuery();
+  const queryUtils = api.useUtils();
 
   const { toast } = useToast();
 
@@ -75,6 +76,7 @@ export default function Celebrate() {
       toast({
         description: "Messages sent successfully",
       });
+      void queryUtils.customer.getBalance.invalidate();
     },
     onError() {
       toast({
