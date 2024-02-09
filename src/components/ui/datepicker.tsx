@@ -33,29 +33,17 @@ export function DatePicker({
   disabled,
 }: DatePickerProps) {
   return (
-    <Popover onOpenChange={onBlur}>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-[280px] justify-start text-left font-normal",
-            !value && "text-muted-foreground",
-            className,
-          )}
-          disabled={disabled}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {value ? format(value, dateFormat) : <span>{placeholder}</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={value}
-          onSelect={onChange}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
+    <input
+      type="date"
+      value={value ? format(value, "yyyy-MM-dd") : ""}
+      onChange={(e) => {
+        const date = e.target.value ? new Date(e.target.value) : undefined;
+        onChange?.(date);
+      }}
+      placeholder={placeholder}
+      onBlur={onBlur}
+      className={cn(className, "h-10 rounded-md border")}
+      disabled={disabled}
+    />
   );
 }
