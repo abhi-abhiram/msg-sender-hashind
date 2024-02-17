@@ -10,6 +10,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
@@ -165,6 +166,8 @@ export function CreateCustomerFormInputs({
           name="dob"
           render={({ field }) => (
             <FormItem className="w-full">
+              <FormLabel>Date of Birth</FormLabel>
+
               <FormControl className="w-full">
                 <DatePicker
                   placeholder="Date of birth"
@@ -181,6 +184,7 @@ export function CreateCustomerFormInputs({
           name="anniversary"
           render={({ field }) => (
             <FormItem className="w-full">
+              <FormLabel>Anniversary</FormLabel>
               <FormControl className="w-full">
                 <DatePicker
                   placeholder="Anniversary"

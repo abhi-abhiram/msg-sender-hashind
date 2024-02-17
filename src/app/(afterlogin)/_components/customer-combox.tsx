@@ -38,6 +38,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "~/components/ui/form";
 import { DatePicker } from "~/components/ui/datepicker";
@@ -305,22 +306,35 @@ function CreateCustomerForm({
                 control={form.control}
                 name="dob"
                 render={({ field }) => (
-                  <DatePicker
-                    placeholder="Date of birth"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
+                  <div className="flex flex-1 flex-col items-start space-y-1">
+                    <FormLabel>
+                      <span>Date of Birth</span>
+                    </FormLabel>
+                    <DatePicker
+                      placeholder="Date of birth"
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </div>
                 )}
               />
               <FormField
                 control={form.control}
                 name="anniversary"
                 render={({ field }) => (
-                  <DatePicker
-                    placeholder="Anniversary"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
+                  <div className="flex flex-1 flex-col items-start space-y-1">
+                    <FormLabel>
+                      <span>Anniversary</span>
+                    </FormLabel>
+
+                    <DatePicker
+                      placeholder="Anniversary"
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </div>
                 )}
               />
             </div>
