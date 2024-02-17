@@ -70,7 +70,9 @@ export function CustomersTable({
   rowSelection,
   onRowSelectionChange,
 }: DataTableProps) {
-  const { data } = api.customer.all.useQuery();
+  const { data } = api.customer.all.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
   const { error } = useFormField();
 
   const table = useReactTable({

@@ -135,7 +135,11 @@ export default function FeedbackForm() {
       toast({
         description: "Feedback added successfully",
       });
-      void queryUtils.customer.getBalance.invalidate();
+      void queryUtils.invalidate(undefined, {
+        predicate(query) {
+          return query.queryKey.includes("balance");
+        },
+      });
     },
   });
 

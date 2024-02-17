@@ -245,35 +245,6 @@ export const customerRouter = createTRPCRouter({
   dashboard: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.select().from(feedbacks).orderBy(desc(feedbacks.created_at));
   }),
-
-  getBalance: protectedProcedure.query(async () => {
-    const url = `${env.FAST_2_SMS}/wallet?authorization=${env.FAST_2_SMS_API_KEY}`
-
-    return 1231
-  })
-
 });
 
 
-// let url = `${process.env.FAST_2_SMS}?authorization=${process.env.API_KEY}&route=dlt&sender_id=${senderId}&message=${messageId}&variables_values=${str}&flash=0&numbers=${phoneNumber}`;
-
-
-//`${process.env.FAST_2_SMS}?authorization=${process.env.API_KEY}&route=dlt&sender_id=${senderId}&message=${messageId}&variables_values=${str}&flash=0&numbers=${mobileArr[i]}`;
-
-
-// b6948139-f8cc-4fc8-8272-286b9f577a89
-
-
-
-// SELECT
-// 	*
-// FROM
-// 	`hashind-project_customer`
-// WHERE
-// 	first_name LIKE '%ab%'
-// 	OR last_name LIKE '%ab%'
-// 	OR phone_no LIKE '%ab%'
-// 	OR last_name LIKE '%ab%'
-// ORDER BY
-// 	created_at DESC
-// LIMIT 10;

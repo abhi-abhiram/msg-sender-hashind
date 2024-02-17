@@ -19,7 +19,8 @@ import {
 } from "~/components/ui/resizable";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { api } from "~/trpc/react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 interface MailProps {
   defaultLayout: number[] | undefined;
@@ -137,8 +138,13 @@ export function InsideLayout({
   );
 }
 
+async function fetchBalance() {
+  return (await axios.get<{ balance: number }>("/api/customers/balance")).data
+    .balance;
+}
+
 function DisplayBalance() {
-  const { data } = api.customer.getBalance.useQuery();
+  const { data } = useQuery(["balance"], fetchBalance);
 
   return (
     <div className="ml-auto">

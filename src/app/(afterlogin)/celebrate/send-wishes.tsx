@@ -66,7 +66,10 @@ export default function Celebrate() {
     },
   });
 
-  const { data } = api.customer.all.useQuery();
+  const { data } = api.customer.all.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+
   const queryUtils = api.useUtils();
 
   const { toast } = useToast();
@@ -76,7 +79,11 @@ export default function Celebrate() {
       toast({
         description: "Messages sent successfully",
       });
-      void queryUtils.customer.getBalance.invalidate();
+      void queryUtils.invalidate(undefined, {
+        predicate(query) {
+          return query.queryKey.includes("balance");
+        },
+      });
     },
     onError() {
       toast({

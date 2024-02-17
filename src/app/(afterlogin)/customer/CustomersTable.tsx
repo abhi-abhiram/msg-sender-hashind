@@ -121,7 +121,11 @@ export function TableDemo() {
   const { mutate } = api.customer.send_messages.useMutation({
     onSuccess: () => {
       toast({ description: "Messages sent successfully" });
-      void queryUtils.customer.getBalance.invalidate();
+      void queryUtils.invalidate(undefined, {
+        predicate(query) {
+          return query.queryKey.includes("balance");
+        },
+      });
     },
   });
 
