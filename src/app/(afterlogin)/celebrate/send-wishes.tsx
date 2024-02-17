@@ -149,7 +149,7 @@ export default function Celebrate() {
                                 value={template.message}
                                 key={template.id}
                               >
-                                {template.id}
+                                {template.label}
                               </SelectItem>
                             ))}
                         </SelectGroup>
@@ -169,7 +169,7 @@ export default function Celebrate() {
                                 value={template.message}
                                 key={template.id}
                               >
-                                {template.id}
+                                {template.label}
                               </SelectItem>
                             ))}
                         </SelectGroup>
@@ -189,7 +189,7 @@ export default function Celebrate() {
                                 value={template.message}
                                 key={template.id}
                               >
-                                {template.id}
+                                {template.label}
                               </SelectItem>
                             ))}
                         </SelectGroup>
@@ -207,7 +207,7 @@ export default function Celebrate() {
                                 value={template.message}
                                 key={template.id}
                               >
-                                {template.id}
+                                {template.label}
                               </SelectItem>
                             ))}
                         </SelectGroup>
@@ -280,7 +280,11 @@ export default function Celebrate() {
       </div>
       <CustomizeTheWishes
         messageId={form.watch("template")}
-        name={customersSelected[0]?.first_name ?? ""}
+        name={
+          customersSelected.length > 1
+            ? "[Customer_Name]"
+            : customersSelected[0]?.first_name
+        }
         celebration={form.watch("celebration_name")}
         onSend={() => submitRef.current?.click()}
       />
@@ -303,8 +307,8 @@ function CustomizeTheWishes({
     if (!messageId) return "";
     const msg_with_name = template_data
       .find(({ message }) => message === messageId)
-      ?.value.replace("{#var#}", name ?? "{#var#}")
-      .replace("{#var#}", celebration ?? "{#var#}");
+      ?.value.replace("{#var#}", name ?? "[Customer_Name]")
+      .replace("{#var#}", celebration ? celebration : "[Celebration_Name]");
 
     return msg_with_name;
   }, [messageId, name, celebration]);
@@ -315,7 +319,7 @@ function CustomizeTheWishes({
       <div className="flex flex-1 flex-col rounded-md border border-border">
         <div className="flex items-start p-4">
           <div className="flex items-center gap-4 text-sm">
-            <span className="font-semibold">{name ? name : `Ramesh`}</span>
+            <span className="font-semibold">{name ? name : `Name`}</span>
           </div>
         </div>
         <Separator />
