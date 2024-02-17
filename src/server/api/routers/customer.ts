@@ -249,7 +249,7 @@ export const customerRouter = createTRPCRouter({
   getBalance: protectedProcedure.query(async () => {
     const url = `${env.FAST_2_SMS}/wallet?authorization=${env.FAST_2_SMS_API_KEY}`
 
-    return (await axios.get<{ wallet: string }>(url)).data.wallet;
+    return 1231
   })
 
 });
