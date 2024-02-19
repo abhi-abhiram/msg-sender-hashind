@@ -303,14 +303,14 @@ function CustomizeTheWishes({
   celebration?: string;
   onSend?: () => void;
 }) {
-  const template_message = useMemo(() => {
+  const [template_message, label] = useMemo(() => {
     if (!messageId) return "";
-    const msg_with_name = template_data
-      .find(({ message }) => message === messageId)
-      ?.value.replace("{#var#}", name ?? "[Customer_Name]")
+    const template = template_data.find(({ message }) => message === messageId);
+    const message = template?.value
+      .replace("{#var#}", name ?? "[Customer_Name]")
       .replace("{#var#}", celebration ? celebration : "[Celebration_Name]");
 
-    return msg_with_name;
+    return [message, template?.label];
   }, [messageId, name, celebration]);
 
   return (
@@ -319,7 +319,9 @@ function CustomizeTheWishes({
       <div className="flex flex-1 flex-col rounded-md border border-border">
         <div className="flex items-start p-4">
           <div className="flex items-center gap-4 text-sm">
-            <span className="font-semibold">{name ? name : `Name`}</span>
+            <span className="font-semibold">
+              {label ? label : `Tempalte Label`}
+            </span>
           </div>
         </div>
         <Separator />
