@@ -133,16 +133,14 @@ export function TableDemo() {
     const filter1 = data?.filter((cus) => {
       if (
         cus.dob.getDate() === dob?.getDate() &&
-        cus.dob.getMonth() === dob?.getMonth() &&
-        cus.dob.getFullYear() === dob?.getFullYear()
+        cus.dob.getMonth() === dob?.getMonth()
       ) {
         return cus;
       }
 
       if (
         cus.anniversary.getDate() === anniversary?.getDate() &&
-        cus.anniversary.getMonth() === anniversary?.getMonth() &&
-        cus.anniversary.getFullYear() === anniversary?.getFullYear()
+        cus.anniversary.getMonth() === anniversary?.getMonth()
       ) {
         return cus;
       }
