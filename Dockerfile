@@ -1,6 +1,6 @@
 ##### DEPENDENCIES
 # Use the official Node.js runtime as a parent image
-FROM node:18-alpine3.17
+FROM node:21.6-alpine
 
 # Set the working directory to /app
 WORKDIR /app
