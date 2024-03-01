@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 import { mapColor } from "./overall-review";
-import { type Visitings } from "../feedback/feedback-form";
+import { type Visitings } from "~/constants";
 
 export function Overview({
   data: preData,

@@ -9,7 +9,7 @@ import { customers, feedbacks } from "~/server/db/schema";
 import { template_data } from "~/templates-data"
 import axios from "axios";
 import { env } from "~/env";
-import { type KPIs } from "~/app/(afterlogin)/feedback/feedback-form";
+import { type KPIs } from "~/constants";
 
 
 const MEDIAN_SCORE = 17;
