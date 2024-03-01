@@ -9,4 +9,5 @@ export default {
     uri: env.DATABASE_URL,
   },
   tablesFilter: ["hashind-project_*"],
+  out: './drizzle'
 } satisfies Config;

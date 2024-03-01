@@ -1,0 +1,182 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "9ffa3273-39c0-4a3b-b56a-e0635f7166f7",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "hashind-project_customer": {
+      "name": "hashind-project_customer",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "phone_no": {
+          "name": "phone_no",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "aniversary": {
+          "name": "aniversary",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "phone_no_index": {
+          "name": "phone_no_index",
+          "columns": [
+            "phone_no"
+          ],
+          "isUnique": false
+        },
+        "created_at_index": {
+          "name": "created_at_index",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "hashind-project_customer_id": {
+          "name": "hashind-project_customer_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "email_unique": {
+          "name": "email_unique",
+          "columns": [
+            "email"
+          ]
+        },
+        "phone_no_unique": {
+          "name": "phone_no_unique",
+          "columns": [
+            "phone_no"
+          ]
+        }
+      }
+    },
+    "hashind-project_feedback": {
+      "name": "hashind-project_feedback",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "visitingTime": {
+          "name": "visitingTime",
+          "type": "enum('morning','afternoon','evening_snacks','dinner')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {
+        "customer_id_index": {
+          "name": "customer_id_index",
+          "columns": [
+            "customer_id"
+          ],
+          "isUnique": false
+        },
+        "created_at_index": {
+          "name": "created_at_index",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "hashind-project_feedback_id": {
+          "name": "hashind-project_feedback_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

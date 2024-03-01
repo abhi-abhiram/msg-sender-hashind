@@ -17,16 +17,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
-
-export const KPIs = [
-  "quality_of_food",
-  "cleanliness",
-  "quality_of_service",
-  "employee_behaviour",
-  "speed_of_service",
-  "apperance_of_employee",
-  "value_of_cash",
-] as const;
+import { type KPIs } from "~/constants";
 
 const feedback_form: {
   id: (typeof KPIs)[number];
@@ -258,10 +249,3 @@ export default function FeedbackForm() {
     </Form>
   );
 }
-
-export const Visitings = [
-  "morning",
-  "afternoon",
-  "evening_snacks",
-  "dinner",
-] as const;

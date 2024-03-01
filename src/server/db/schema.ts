@@ -10,8 +10,7 @@ import {
   unique,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { type KPIs } from "~/app/(afterlogin)/feedback/feedback-form";
-import { Visitings } from "~/app/(afterlogin)/feedback/feedback-form";
+import { type KPIs, Visitings } from "~/constants";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
